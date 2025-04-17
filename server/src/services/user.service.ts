@@ -1,7 +1,8 @@
-import User from "../models/user.model";
-import { CreateUserInput , LoginInput } from "../models/user.schema";
+import User from "../models/User/user.model";
+import { CreateUserInput , LoginInput } from "../models/User/user.schema";
 
 export const createUser = async({username, email, password} : CreateUserInput) => {
+    // If any field is missing
     if(!username || !email || !password){
         throw new Error("All fields are required");
     }
@@ -22,6 +23,7 @@ export const createUser = async({username, email, password} : CreateUserInput) =
         password : hashedPassword,
     });
 
+    // Save user to database
     await user.save();
 
     // Remove Password from response
@@ -35,6 +37,7 @@ export const loginUser = async ({email, password} : LoginInput) => {
     // Find user by email
     const user = await User.findOne({email});
 
+    // If user not found
     if(!user){
         throw new Error("Invalid Credentials");
     }
@@ -42,6 +45,7 @@ export const loginUser = async ({email, password} : LoginInput) => {
     // Verify Password
     const isPasswordValid = await User.comparePassword(password, user.password);
 
+    // If password is invalid
     if(!isPasswordValid){
         throw new Error("Invalid Credentials");
     }

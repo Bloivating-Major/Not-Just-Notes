@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// Schema for creating user
 export const userSchema = z.object({
     username : z.string({
         required_error : "Username is required"
